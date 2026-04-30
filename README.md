@@ -5,6 +5,8 @@
 
 **Important:** This runs entirely on the XRP *testnet* — a sandbox environment made for testing. No real money is involved at any point.
 
+📁 **GitHub Repository:** [https://github.com/Goddy01/xrp-testnet](https://github.com/Goddy01/xrp-testnet)
+
 ---
 
 ## What happens when you run this
@@ -39,12 +41,10 @@ To check it worked, open Terminal (Mac) or Command Prompt (Windows) and type:
 ```
 python3 --version
 ```
-
-or 
+or
 ```
 python --version
 ```
-
 You should see something like `Python 3.12.0`.
 
 ### 3. pip
@@ -56,7 +56,12 @@ pip is Python's built-in tool for installing libraries. It comes with Python aut
 
 Open **Terminal** (Mac) or **Command Prompt** (Windows) and run these commands one at a time, pressing Enter after each.
 
-Move into the project folder:
+### Step 1 — Download the project from GitHub
+```
+git clone https://github.com/Goddy01/xrp-testnet.git
+```
+
+Then move into the project folder:
 ```
 cd xrp-testnet
 ```
@@ -73,11 +78,11 @@ Then activate it:
   ```
   source .venv/bin/activate
   ```
-- **Windows:**
+- **Windows Command Prompt:**
   ```
   .venv\Scripts\activate
   ```
-  - **Git Bash:**
+- **Windows Git Bash:**
   ```
   source .venv/Scripts/activate
   ```
@@ -88,7 +93,7 @@ You'll know it worked when you see `(.venv)` appear at the start of your termina
 ```
 pip install -r requirements.txt
 ```
-This installs the needed library which is just xrpl-py.
+This installs the one library the project needs (xrpl-py). It only takes a few seconds.
 
 ---
 
@@ -101,6 +106,32 @@ python xrpl_remittance.py
 ```
 
 Wait about 10–15 seconds. The script will connect to the testnet, create wallets, send the payment, and print your receipt.
+
+---
+
+## Sending to a specific wallet with custom parameters
+
+If you want to send to a specific wallet address with a custom amount or destination tag — for example to verify a transaction with someone — you can pass those details directly in the command. No need to edit the script at all.
+
+**Mac/Linux:**
+```
+AMOUNT_XRP=7 DEST_TAG=73921 RECEIVER_ADDR=rsRvS2T7UFgGyqdRzAC7j26hSMfCrm4FP3 python xrpl_remittance.py
+```
+
+**Windows Command Prompt:**
+```
+set AMOUNT_XRP=7 && set DEST_TAG=73921 && set RECEIVER_ADDR=rsRvS2T7UFgGyqdRzAC7j26hSMfCrm4FP3 && python xrpl_remittance.py
+```
+
+Here's what each part means:
+
+| Parameter | What it does | Example |
+|---|---|---|
+| `AMOUNT_XRP` | How much XRP to send | `AMOUNT_XRP=7` |
+| `DEST_TAG` | The destination tag to include with the payment | `DEST_TAG=73921` |
+| `RECEIVER_ADDR` | The wallet address you want to send to | `RECEIVER_ADDR=rsRvS2T7...` |
+
+You can use any combination — for example, use just `AMOUNT_XRP=3` to change only the amount and leave everything else at the default. Any parameter you leave out falls back to the default value set in the script.
 
 ---
 
@@ -176,7 +207,7 @@ Every time you run the script, a record is saved to a file called `transactions.
 Python isn't installed, or wasn't added to your PATH during installation. Revisit the Python step in Prerequisites above.
 
 **"No module named xrpl"**
-The library isn't installed yet, or your virtual environment isn't active. Make sure you ran `pip install xrpl-py` and that you see `(.venv)` in your terminal.
+The library isn't installed yet, or your virtual environment isn't active. Make sure you ran `pip install -r requirements.txt` and that you see `(.venv)` in your terminal.
 
 **The script just hangs / times out**
 The testnet faucet is occasionally slow. Wait 30 seconds and try again. If it keeps failing, the testnet may be briefly down — try again in a few minutes.
@@ -190,8 +221,13 @@ Git isn't installed. See the Git step in Prerequisites above.
 
 | Link | What it's for |
 |---|---|
+| [GitHub Repository](https://github.com/Goddy01/xrp-testnet) | Clone or browse the full source code |
 | [XRPL Testnet Explorer](https://testnet.xrpl.org) | Look up any transaction by its hash |
 | [XRPL Testnet Faucet](https://faucet.altnet.rippletest.net/accounts) | Manually create and fund a testnet wallet in your browser |
 | [What is a destination tag?](https://xrpl.org/source-and-destination-tags.html) | Official explainer on how routing tags work |
 
 ---
+
+## What comes next (Phase 2)
+
+Once this is validated, the next phase wraps this script into a proper backend service — with a database, an API, and a dashboard showing transaction history in real time. The core logic stays exactly the same. We're just building the house around the foundation.
