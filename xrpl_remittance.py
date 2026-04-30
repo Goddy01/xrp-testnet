@@ -15,8 +15,8 @@ Usage
   Optional env-overrides:
     SENDER_SEED    – reuse an existing funded sender wallet
     RECEIVER_ADDR  – send to a specific receiver address
-    DEST_TAG       – destination tag (default: 593821)
-    AMOUNT_XRP     – send amount in XRP (default: 3)
+    DEST_TAG       – destination tag (default: 735412)
+    AMOUNT_XRP     – send amount in XRP (default: 10)
 
 No mainnet. No real funds. No private keys stored.
 """
@@ -44,8 +44,19 @@ from xrpl.utils import xrp_to_drops
 TESTNET_URL   = "https://s.altnet.rippletest.net:51234"
 EXPLORER_BASE = "https://testnet.xrpl.org/transactions"
 
-AMOUNT_XRP = float(os.getenv("AMOUNT_XRP", "3"))
-DEST_TAG   = int(os.getenv("DEST_TAG", "593821"))
+# Default values — you do NOT need to edit this file to change them.
+# Simply pass your preferred values in the command when you run the script:
+#
+#   Mac / Linux:
+#     AMOUNT_XRP=7 DEST_TAG=73921 RECEIVER_ADDR=rXXX... python xrpl_remittance.py
+#
+#   Windows Command Prompt:
+#     set AMOUNT_XRP=7 && set DEST_TAG=73921 && set RECEIVER_ADDR=rXXX... && python xrpl_remittance.py
+#
+# Any value you don't pass will fall back to the defaults below.
+AMOUNT_XRP    = float(os.getenv("AMOUNT_XRP", "10"))
+DEST_TAG      = int(os.getenv("DEST_TAG", "735412"))
+RECEIVER_ADDR = os.getenv("RECEIVER_ADDR", "rpmiGyhe5EjuUZ5VW52nK9TA9gKudHJJU3")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -94,7 +105,7 @@ def get_receiver_address(client: JsonRpcClient) -> str:
     Use a fixed receiver address from RECEIVER_ADDR env var,
     or generate a second funded testnet wallet as the receiver.
     """
-    addr = os.getenv("RECEIVER_ADDR")
+    addr = RECEIVER_ADDR
     if addr:
         log.info("[STEP 2] Using provided receiver address: %s", addr)
         return addr
